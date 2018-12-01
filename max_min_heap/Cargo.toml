@@ -1,0 +1,7 @@
+[package]
+name = "max_min_heap"
+version = "0.1.0"
+authors = ["Alon Gubkin <alon.gubkin@gmail.com>"]
+
+[dependencies]
+rand = "0.6"
