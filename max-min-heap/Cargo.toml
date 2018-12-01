@@ -1,5 +1,5 @@
 [package]
-name = "max_min_heap"
+name = "max-min-heap"
 version = "0.1.0"
 authors = ["Alon Gubkin <alon.gubkin@gmail.com>"]
 
