@@ -143,7 +143,7 @@ def breadthFirstSearch(problem):
       
 def uniformCostSearch(problem):
   "Search the node of least total cost first. "
-  cost = lambda node: problem.getCostOfActions(node.path[1:])
+  cost = lambda node: problem.getCostOfActions(node.path)
   return graphSearch(problem, util.PriorityQueueWithFunction(cost))
 
 def nullHeuristic(state, problem=None):
