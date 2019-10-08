@@ -1,0 +1,1 @@
+SELECT title, pdate FROM item WHERE pdate >= '2019-06-01' AND pdate < '2019-07-01';
