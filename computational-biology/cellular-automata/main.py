@@ -27,20 +27,19 @@ TOTAL_COUPLES = 50
 MINIMUM_BREAKUP_SCORE_DIFF = 15
 BREAKUP_PROBABILITY_COEFFICIENT = 0.142
 INITIAL_CYCLES = 3000
-UNMARRIED_SCORE = 20
+UNMARRIED_SCORE = 50
 MAXIMUM_SCORE = 100
+BREAKUPS_MEMORY = 3
+
 
 class Person(CellularAutomataEntity):
-  def __init__(self, name, gender, score=0, direction=None, 
-               married_to=None, breakups=None, disappear=False, total_breakups=0):
+  def __init__(self, name, gender, score=0, direction=None, married_to=None, breakups=None):
     self.name = name
     self.gender = gender
     self.score = score
     self.direction = direction
     self.married_to = married_to
     self.breakups = [] if breakups is None else breakups
-    self.disappear = disappear
-    self.total_breakups = total_breakups
 
   def get_color(self):
     if self.gender == 'M':
@@ -51,14 +50,12 @@ class Person(CellularAutomataEntity):
   def add_breakup(self, name):
     self.breakups.insert(0, name)
 
-    if len(self.breakups) > 3:
-      self.breakups = self.breakups[0:3]
-
-    self.total_breakups += 1
+    if len(self.breakups) > BREAKUPS_MEMORY:
+      self.breakups = self.breakups[0:BREAKUPS_MEMORY]
 
   def __copy__(self):
     return Person(self.name, self.gender, self.score, self.direction, self.married_to, 
-      self.breakups, self.disappear, self.total_breakups)
+      self.breakups)
 
 class Spot(CellularAutomata2D):
   def __init__(self, walkable_from=None):
@@ -287,7 +284,7 @@ class MarriageGame(CellularAutomata2D):
           
     married_couples = len(scores)
 
-    scores += [UNMARRIED_SCORE] * (TOTAL_COUPLES - len(scores))
+    scores = scores * 2 + [UNMARRIED_SCORE] * (TOTAL_COUPLES - len(scores))
     return married_couples, 1.0 - (mean(scores) if len(scores) > 0 else 0) / MAXIMUM_SCORE
 
 

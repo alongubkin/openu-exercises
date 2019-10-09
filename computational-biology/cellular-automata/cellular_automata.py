@@ -22,7 +22,6 @@ def neighborhood(matrix, position):
     'bottom_right': matrix[y + 1][x + 1] if x + 1 < size and y + 1 < size else None,
   }
 
-
 class CellularAutomataEntity:
   def get_color(self):
     raise NotImplementedError()
