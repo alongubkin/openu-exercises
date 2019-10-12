@@ -22,6 +22,7 @@ OPPOSITE_DIRECTION = {
   'bottom_right': 'top_left',
 }
 
+# Hyperparameters
 MATRIX_SIZE = 20
 TOTAL_COUPLES = 50
 MINIMUM_BREAKUP_SCORE_DIFF = 15
