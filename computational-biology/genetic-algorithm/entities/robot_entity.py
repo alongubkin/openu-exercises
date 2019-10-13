@@ -2,8 +2,10 @@ from entities.entity import Entity
 
 
 class RobotEntity(Entity):
+  TYPE = "ROBOT"
+  
   def __init__(self, position, path=[]):
-    super(RobotEntity, self).__init__('ROBOT', position)
+    super(RobotEntity, self).__init__(RobotEntity.TYPE, position, walkable=True)
     self.path = path
 
   def update(self, grid):

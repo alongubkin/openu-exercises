@@ -1,7 +1,8 @@
 class Entity:
-  def __init__(self, entity_type, position):
+  def __init__(self, entity_type, position, walkable):
     self.entity_type = entity_type
     self.position = position
+    self.walkable = walkable
 
   def update(self, grid):
     """Returns whether there will be another step for this entity, so we can know when to
@@ -14,6 +15,10 @@ class Entity:
   def _serialize(self, data):
     """Helper method for inherited entities"""
     return {
-      **{ 'type': self.entity_type, 'position': self.position },
+      **{ 
+        'type': self.entity_type,
+        'position': self.position,
+        'walkable': self.walkable,
+      },
       **data,
     }

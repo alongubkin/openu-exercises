@@ -2,16 +2,17 @@ import pygame
 import sys
 import json
 from grid_environment import Grid
-from entities import RobotEntity, BrickEntity
+from entities import RobotEntity, BrickEntity, TreasureEntity
 
 
 def play(grid):
   pygame.init()
 
-  screen = pygame.display.set_mode((grid.size * 32, grid.size * 32))
+  screen = pygame.display.set_mode(((grid.size + 1) * 32, (grid.size + 1) * 32))
 
-  robot = pygame.image.load('robot.png').convert()
-  brick = pygame.image.load('brick.png').convert()
+  robot = pygame.image.load('images/robot.png').convert()
+  brick = pygame.image.load('images/brick.png').convert()
+  treasure = pygame.image.load('images/treasure.png').convert()
 
   pygame.display.set_icon(robot)
   pygame.display.set_caption('Robot with Genetic Algorithm')
@@ -24,18 +25,20 @@ def play(grid):
     
     screen.fill((255, 255, 255))
 
-    for entity in grid.entities.values():
+    for entity in grid.get_all_entities():
       x, y = entity.position
       
       if isinstance(entity, RobotEntity):
         screen.blit(robot, (x * 32, y * 32))
       elif isinstance(entity, BrickEntity):
         screen.blit(brick, (x * 32, y * 32))
-        
+      elif isinstance(entity, TreasureEntity):
+        screen.blit(treasure, (x * 32, y * 32))
+
     grid.update()
 
     pygame.display.update()
-    pygame.time.delay(100)
+    pygame.time.delay(300)
          
 
 def main():
