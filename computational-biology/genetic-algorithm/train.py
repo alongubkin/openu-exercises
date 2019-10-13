@@ -96,12 +96,21 @@ class GeneticPathfinder(GeneticAlgorithm):
     return self._optimize(random.choice(paths))
 
   def _optimize(self, path):
-    # Optimize
-    for x in range(len(path)):
-      moves = self._environment.get_legal_moves(path[x])
-      for y in reversed(range(x + 1, len(path))):
-        if path[y] in moves:
-          return path[0:x + 1] + path[y:]
+
+    for _ in range(10):
+      for x in range(len(path)):
+        changed = False
+
+        moves = list(self._environment.get_legal_moves(path[x]))
+        for y in reversed(range(x + 2, len(path))):
+          if path[y] in moves:
+            path = path[0:x + 1] + path[y:]
+            changed = True
+            break
+        
+        if changed:
+          break
+
     return path
 
   def mutate(self, individual):
@@ -130,8 +139,9 @@ class GeneticPathfinder(GeneticAlgorithm):
 
 def main():
   pathfinder = GeneticPathfinder()
+  # print(pathfinder._optimize([(1,1), (2, 1), (2, 2), (1, 2), (1, 3), (2, 3), (2, 4), (2, 5), (2, 6), (1, 6), (1, 7), (1, 8), (1, 9), (2, 9), (3, 9), (4, 9), (4, 8), (4, 7), (4, 6), (5, 6), (5, 5)]))
   path = pathfinder.run()
-
+  # path = [(2, 1), (2, 2), (1, 2), (1, 3), (2, 3), (2, 4), (2, 5), (2, 6), (1, 6), (1, 7), (1, 8), (1, 9), (2, 9), (3, 9), (4, 9), (4, 8), (4, 7), (4, 6), (5, 6), (5, 5)]
   with open('example_grid.json', 'w') as grid_file:
     grid_file.write(json.dumps(build_environment(path).serialize()))
 
