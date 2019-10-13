@@ -30,7 +30,7 @@ class GeneticAlgorithm:
     raise NotImplementedError()
   
   def _sort_population_by_fitness(self, population):
-    return sorted(population, key=lambda individual: self.fitness(individual))
+    return sorted(population, key=lambda individual: self.fitness(individual), reverse=True)
 
   def _f(self, population):
     return [(individual, self.fitness(individual)) for individual in population]
@@ -60,9 +60,10 @@ class GeneticAlgorithm:
 
     for _ in range(2000):  # TODO: maximum iterations
       fittest = self._sort_population_by_fitness(population)[0]
-      
-      print('Generation {}, fitness: {}, fittest: {}'.format(self.generation, self.fitness(fittest), fittest))
-      if self.fitness(fittest) <= 0.1:
+      fitness = self.fitness(fittest)
+
+      print('Generation {}, fitness: {}, fittest: {}'.format(self.generation, fitness, fittest))
+      if fitness > 100 and fitness <= 100.1:
         print("FOUND!")
         return fittest
 

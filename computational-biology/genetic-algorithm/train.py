@@ -9,6 +9,13 @@ from math import sqrt
 
 def build_environment(robot_path=[]):
   grid = Grid(size=10)
+
+  grid.add_entity(BrickEntity((7, 3)))
+  grid.add_entity(BrickEntity((7, 2)))
+  grid.add_entity(BrickEntity((7, 1)))
+  grid.add_entity(BrickEntity((6, 1)))
+  grid.add_entity(BrickEntity((5, 1)))
+  grid.add_entity(BrickEntity((4, 1)))
   grid.add_entity(BrickEntity((3, 1)))
   grid.add_entity(BrickEntity((3, 2)))
   grid.add_entity(BrickEntity((3, 3)))
@@ -60,7 +67,7 @@ class GeneticPathfinder(GeneticAlgorithm):
     # 
 
     distance = manhattan(robot_position, self._target_position)
-    return ((1.0 / distance) if distance > 0 else 0) + (1.0 / len(individual))
+    return (1.0 / distance) if distance > 0 else (100 + (1.0 / len(individual)))
 
   def crossover(self, parent1, parent2):
     if parent1 == parent2:
@@ -112,6 +119,26 @@ class GeneticPathfinder(GeneticAlgorithm):
           break
 
     return path
+
+  # def mutate(self, individual):
+
+  #   if individual[-1] != self._target_position and random.random() <= 0.8:
+  #     mutations = [move for move in self._environment.get_legal_moves(individual[-1]) 
+  #       if move not in individual]
+  #     if len(mutations) > 0:
+  #       individual = individual + [random.choice(mutations)]
+  
+
+  #   # Modify existing
+  #   if random.random() < 0.2:
+  #     index = random.randrange(0, len(individual))
+  #     mutations = [move for move in 
+  #       self._environment.get_legal_moves(individual[index - 1] if index > 0 else self._start_position)
+  #       if move not in individual] #if move != individual[index] and ]
+  #     if len(mutations) > 0:
+  #       individual = individual[0:index] + [random.choice(mutations)]
+    
+  #   return individual
 
   def mutate(self, individual):
 
