@@ -1,9 +1,5 @@
 import random
 
-POPULATION_SIZE = 50
-CROSSOVER_RATE = 0.7
-MUTATION_RATE = 1.0
-
 def weighted_random_choice(choices):
   max = sum(value for key, value in choices)
   pick = random.uniform(0, max)
@@ -14,8 +10,10 @@ def weighted_random_choice(choices):
       return key
             
 class GeneticAlgorithm:
-  def __init__(self):
+  def __init__(self, population_size, debug=None):
     self.generation = 0
+    self.population_size = population_size
+    self.debug = debug
 
   def create_population(self):
     raise NotImplementedError()
@@ -29,48 +27,39 @@ class GeneticAlgorithm:
   def mutate(self, individual):
     raise NotImplementedError()
   
-  def _sort_population_by_fitness(self, population):
-    return sorted(population, key=lambda individual: self.fitness(individual), reverse=True)
+  def stop_condition(self, iterations, fitness):
+    raise NotImplementedError()
 
-  def _f(self, population):
-    return [(individual, self.fitness(individual)) for individual in population]
-
-  def next_generation(self, population):
-    current_generation = self._f(population)
+  def next_generation(self, current_generation):
     next_generation = []
       
-    while len(next_generation) < POPULATION_SIZE:
-      if random.random() < CROSSOVER_RATE:
-        parent1 = weighted_random_choice(current_generation)
-        parent2 = weighted_random_choice(current_generation)
+    while len(next_generation) < self.population_size:
+      parent1 = weighted_random_choice(current_generation)
+      parent2 = weighted_random_choice(current_generation)
 
-        offspring = self.crossover(parent1, parent2)
-      else:
-        offspring = weighted_random_choice(current_generation)
-
-      if random.random() < MUTATION_RATE:
-       offspring = self.mutate(offspring)
-
+      offspring = self.mutate(self.crossover(parent1, parent2))
       next_generation.append(offspring)
 
     return next_generation
 
-  def run(self):
+  def run(self, iterations=1000):
     population = list(self.create_population())
 
-    for _ in range(2000):  # TODO: maximum iterations
-      fittest = self._sort_population_by_fitness(population)[0]
-      fitness = self.fitness(fittest)
+    for iteration in range(iterations):
+      current_generation = [(individual, self.fitness(individual)) for individual in population]
+      best_individual, best_individual_fitness = max(current_generation, key=lambda item: item[1])
 
-      print('Generation {}, fitness: {}, fittest: {}'.format(self.generation, fitness, fittest))
-      if fitness > 100 and fitness <= 100.1:
-        print("FOUND!")
-        return fittest
+      if self.debug is not None:
+        print('[{}] Generation {}, fitness: {}, best individual: {}'.format(
+          self.debug, self.generation, best_individual_fitness, best_individual))
 
-      population = self.next_generation(population)
+      if self.stop_condition(iteration, best_individual_fitness):
+        return best_individual
+
+      population = self.next_generation(current_generation)
       self.generation += 1
 
-    return fittest
+    return best_individual
 
 
 

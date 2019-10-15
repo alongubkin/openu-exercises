@@ -93,3 +93,6 @@ class Grid:
       grid.add_entity(ENTITY_BY_TYPE[entity['type']].deserialize(entity))
 
     return grid
+
+  def __copy__(self):
+    return self.deserialize(self.serialize())
