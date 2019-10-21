@@ -5,3 +5,5 @@ Requirements:
 
 Usage:
   python cla.py [code-path]
+
+NOTE: Make sure you have the latest Python version. Python 2 won't work!
