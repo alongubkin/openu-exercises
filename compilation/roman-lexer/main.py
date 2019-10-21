@@ -29,7 +29,7 @@ t_ignore = ' '
 
 # Error handling rule
 def t_error(t):
-  print("Illegal character '{}'".format(t.value[0]))
+  print("Illegal character '{}'".format(t.value[0]), file=sys.stderr)
   t.lexer.skip(1)
 
 def main():

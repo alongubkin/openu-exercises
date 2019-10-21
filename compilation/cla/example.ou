@@ -1,0 +1,21 @@
+/* Finding minimum between 
+	two numbers */
+a, b: float;
+
+{
+	input(a);
+	input(B);
+	static_cast(int)(b);
+	if (a < b)
+		output(a);
+	else
+		output(b);
+
+	if (a <= 0.5 || a < = b) {
+		output(a);
+	} else if (a>5.) {
+		output(b);
+	}
+
+	a = b;
+}

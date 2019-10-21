@@ -47,7 +47,7 @@ t_ignore = ' \t\n'
 
 # Error handling rule
 def t_error(t):
-  print("Illegal character '{}' on line {}".format(t.value[0], t.lineno))
+  print("Illegal character '{}' on line {}".format(t.value[0], t.lineno), file=sys.stderr)
   t.lexer.skip(1)
 
 def main():
