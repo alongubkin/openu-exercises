@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-char* currentToken = NULL;
+char* lookahead = NULL;
 
 bool S();
 bool A();
@@ -10,35 +10,34 @@ bool B();
 
 // S1 -> aBAa
 bool S1() {
-  char* originalToken = currentToken;
-  if ('a' != *currentToken++) { currentToken = originalToken; return false; }
-  if (!B()) { currentToken = originalToken; return false; }
-  if (!A()) { currentToken = originalToken; return false; }
-  if ('a' != *currentToken++) { currentToken = originalToken; return false; }
+  if ('a' != *lookahead++) { return false; }
+  if (!B()) { return false; }
+  if (!A()) { return false; }
+  if ('a' != *lookahead++) { return false; }
   return true;
 }
 
 // S2 -> Ac
 bool S2() {
-  char* originalToken = currentToken;
-  if (!A()) { currentToken = originalToken; return false; }
-  if ('c' != *currentToken++) { currentToken = originalToken; return false; }
+  if (!A()) { return false; }
+  if ('c' != *lookahead++) { return false; }
   return true;
 }
 
 // S -> S1 | S2
 bool S() {
-  char* originalToken = currentToken;
-  if (S1()) { return true; } currentToken = originalToken;
-  if (S2()) { return true; } currentToken = originalToken;
+  switch (*lookahead) {
+    case 'a': return S1();
+    case 'b': case 'c': return S2();
+  }
+
   return false;
 }
 
 // A1 -> bB
 bool A1() {
-  char* originalToken = currentToken;
-  if ('b' != *currentToken++) { currentToken = originalToken; return false; }
-  if (!B()) { currentToken = originalToken; return false; }
+  if ('b' != *lookahead++) { return false; }
+  if (!B()) { return false; }
   return true;
 }
 
@@ -49,46 +48,47 @@ bool A2() {
 
 // A -> A1 | A2 
 bool A() {
-  char* originalToken = currentToken;
-  if (A1()) { return true; } currentToken = originalToken;
-  if (A2()) { return true; } currentToken = originalToken;
+  switch (*lookahead) {
+    case 'a': case 'c': return A2();
+    case 'b': return A1();
+  }
+
   return false;
 }
 
 // B1 -> abS
 bool B1() {
-  char* originalToken = currentToken;
-  if ('a' != *currentToken++) { currentToken = originalToken; return false; }
-  if ('b' != *currentToken++) { currentToken = originalToken; return false; }
-  if (!S()) { currentToken = originalToken; return false; }
+  if ('a' != *lookahead++) { return false; }
+  if ('b' != *lookahead++) { return false; }
+  if (!S()) { return false; }
   return true;
 }
 
 // B2 -> bbSB
 bool B2() {
-  char* originalToken = currentToken;
-  if ('b' != *currentToken++) { currentToken = originalToken; return false; }
-  if ('b' != *currentToken++) { currentToken = originalToken; return false; }
-  if (!S()) { currentToken = originalToken; return false; }
-  if (!B()) { currentToken = originalToken; return false; }
+  if ('b' != *lookahead++) { return false; }
+  if ('b' != *lookahead++) { return false; }
+  if (!S()) { return false; }
+  if (!B()) { return false; }
   return true;
 }
 
-// B2 -> caB
+// B3 -> caB
 bool B3() {
-  char* originalToken = currentToken;
-  if ('c' != *currentToken++) { currentToken = originalToken; return false; }
-  if ('a' != *currentToken++) { currentToken = originalToken; return false; }
-  if (!B()) { currentToken = originalToken; return false; }
+  if ('c' != *lookahead++) { return false; }
+  if ('a' != *lookahead++) { return false; }
+  if (!B()) { return false; }
   return true;
 }
 
 // B -> B1 | B2 | B3 
 bool B() {
-  char* originalToken = currentToken;
-  if (B1()) { return true; } currentToken = originalToken;
-  if (B2()) { return true; } currentToken = originalToken;
-  if (B3()) { return true; } currentToken = originalToken;
+  switch (*lookahead) {
+    case 'a': return B1();
+    case 'b': return B2();
+    case 'c': return B3();
+  }
+
   return false;
 }
 
@@ -100,9 +100,9 @@ int main(int argc, char* argv[]) {
   }
 
   char* input = argv[1];
-  currentToken = input;
+  lookahead = input;
 
-  if (S() && currentToken == (input + strlen(input))) {
+  if (S() && lookahead == (input + strlen(input))) {
     printf("Parse successful.\n");
   } else {
     printf("Parse failure.\n");
