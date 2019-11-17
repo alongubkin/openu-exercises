@@ -1,0 +1,4 @@
+(sum (zero 3 4)
+     (double (height (sum (sum 1 (sum 2)))
+                      3))
+      20)
