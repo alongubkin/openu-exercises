@@ -7,3 +7,6 @@ In order to run bow.py, install the following version of OpenCV:
 Additionally, install the following package for the progress bar:
 
     pip3 install tqdm
+
+Download dataset from:
+http://people.csail.mit.edu/torralba/code/spatialenvelope/spatial_envelope_256x256_static_8outdoorcategories.zip
