@@ -130,11 +130,6 @@ def multiclass_roc_auc_score(y_test, y_pred, average="macro"):
 def main():
   print('Loading data...')
   x_train, x_test, y_train, y_test = load_data()
-  
-  x_train = x_train[0:10]
-  x_test = x_test[0:10]
-  y_train = y_train[0:10]
-  y_test = y_test[0:10]
 
   K = 500 if not USE_VGG16_FEATURE_EXTRACTION else 64
 
